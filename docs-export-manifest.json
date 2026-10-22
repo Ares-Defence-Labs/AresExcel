@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "product": "AresExcelSDK",
+  "publicationEnabled": false,
+  "scope": "Documentation only; this file inventories every other exported file and is not a native audit or a signature.",
+  "sha256": {
+    "CHANGELOG.md": "d29fe687c526b3adcf5782d9a0e308818b812a2da478975108ae3038637adfa7",
+    "NOTICE.md": "4a538d04e8870ce8c6d01735b9ed3976ad90e679fe2dce04efa8b9d2bb393420",
+    "README.md": "ded0a96db9ae31e22eb8060e3da5cd9e4aaba01a99c3099a1d3301288b2a3801",
+    "SECURITY.md": "60a0edc4e2f828e1b1d90fc1fc391beee9ed14deb4c154d320a60e95e48cc584",
+    "docs/api-reference.md": "e25fff58c504dc8fdb71abef423f5139275194b5d7e7d82596becd504ad9865c",
+    "docs/assets/screenshots/editor.png": "4355d214f743687afa6cf3246b0dbb642ab69249d9590a82b95e33818e811153",
+    "docs/assets/screenshots/scan-review.png": "3b6ecd0089660ebc0627b1d030e28f498cc6792bde29c6a00e2e72a622543cc5",
+    "docs/compatibility.md": "9be3ad47ee489f591e70cb1c2d738215b2f6d95ec13ddcd0ae0dcaf97ffdc4a7",
+    "docs/editor.md": "1c0fb6bc5c0c088c74df20010651d3623ce3b2c830e85422963b1d76676b2088",
+    "docs/integration.md": "7aa22e1b5b946b505b3a2e343b6b1d791fd5370122d3915eccde291351249d0e",
+    "docs/licensing.md": "5b87945fe42cbba1b5ae7a31b04c1634726fed0e7938de6b6f39e74cfb50527b",
+    "docs/packaging.md": "9f512fc9d2978ee77811d65d4bc6fcb68facf21ed44705a2c2d0385c3f01e7b4",
+    "docs/platforms.md": "88c9b89354d0f03100767f5de7e27538553fff5316178715eafac7fb46d479a4",
+    "docs/public-assets.json": "dced584ef105e7de567be6f12c749cd423fb8da04b8e0b6706b4a12541c79fe0",
+    "docs/release-status.md": "b39189f991b5ea550617b9287fd765dd872edf50dc905a6e72c2a6dc4abf7695",
+    "docs/scanning.md": "65391d1f3314fd9ef65fb4df1ff45faf8b36af2b95395ea5e5fc09aef564fae2",
+    "docs/screenshots.md": "1f0bcbfee2a8150ccc6c4fd2ed85524c27207b48a1cf5dadd64b088442efb205",
+    "docs/security-and-assets.md": "4f2c683e6a4f95aec4aba5c34608c9142e025bc384fbf74efb2290f0b41905d6",
+    "examples/file_operations.dart": "05fc9fff512022e7d56c40fe6feb480c1faebdc7cf049f7b894b605f8ffeae09",
+    "examples/scan_and_edit.dart": "68218ad434ead1d4cc8b5bb3072089d58cffe7a6ffae94fd18f7baf1a1954ae4",
+    "packaging/platforms.json": "fea3d415730499059e3758f1ab9d84c416918e6853dae9bd873700116d2aeeae",
+    "packaging/pubspec.yaml": "1bb4acfdc94d9f86fb07fe038f141c902bda0dfe0a6391a8e3685849fd17ba24"
+  }
+}
