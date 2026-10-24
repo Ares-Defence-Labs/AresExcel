@@ -46,6 +46,42 @@ Evaluation does not replace formulas with their calculated values. Construct a
 new engine after edits; `calculationTime` can be supplied for deterministic
 TODAY/NOW evaluation.
 
+The Text functions picker includes `TEXTJOIN`, `SUBSTITUTE` and `REPT`.
+See [text calculations and bounds](text-functions.md) for scalar/range semantics,
+unsupported broadcasting and reference-validation limits.
+
+The Lookup picker includes `XLOOKUP` and `XMATCH`. Exact matching is the default; match modes
+`-1`/`1` select the next smaller/larger item if an exact value is absent, `2`
+selects wildcards, and search mode `-1` searches from the last item. Linear search
+accepts unsorted keys. Return arrays must share the lookup vector's search
+dimension. A matching whole row/column can be consumed by SUM, INDEX, ROWS,
+COLUMNS or another lookup; worksheet spilling is unfinished. Selected blank
+return cells become zero values. Optional placeholders for `if_not_found`,
+`match_mode` and `search_mode` retain their defaults, for example:
+`=XLOOKUP(25,{30;10;20},{300;100;200},,-1)`.
+
+Binary search modes `2`/`-2` require ascending/descending keys and support exact
+and next-smaller/larger matching. The engine does not sort or verify the input's
+order. Only probing is logarithmic; array/reference materialization retains its
+existing costs and limits. Binary duplicate-position, mixed-type and collation
+conformance remain unverified; use linear forward/reverse search when duplicate
+position matters. Binary wildcard combinations remain unavailable.
+
+`XMATCH` returns a one-based position from a row or column vector and composes
+with INDEX. It supports default exact forward, reverse, nearest, wildcard and
+sorted binary searches through the same lookup implementation. Optional mode
+placeholders retain defaults; required key/vector omissions are invalid.
+`_xlfn.XMATCH` is normalized explicitly. Example:
+`=INDEX({{10,20;30,40}},XMATCH("B",{{"A";"B"}}),XMATCH("Q2",{{"Q1","Q2"}}))`
+returns 40. See [Microsoft XMATCH](https://support.microsoft.com/en-gb/excel/functions/xmatch-function).
+
+The fallback is evaluated only on a miss. Check `supported` and `error`: regex,
+array-valued lookup keys, spills, omitted lookup values and reference-return
+variants remain unavailable. Complete Unicode/locale and Microsoft reference
+conformance remain open. Modern `_xlfn.XLOOKUP` formulas use the same path;
+expressions remain native XLSX formulas through managed save and editor history.
+See [Microsoft's XLOOKUP syntax](https://support.microsoft.com/en-us/excel/functions/xlookup-function).
+
 The Financial picker includes NPV, XNPV, IRR, XIRR, MIRR and RRI. NPV discounts the first flow
 at period one; add an immediate investment outside it. Numeric range/array
 entries keep their order and zeros, while text/logical/blank entries are skipped.

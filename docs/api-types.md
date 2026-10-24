@@ -139,7 +139,7 @@ Widget build(BuildContext context);
 `package:ares_office_core/src/scanner/ares_excel_scan.dart`
 
 ```dart
-class AresExcelExtractor
+abstract final class AresExcelExtractor
 static AresExcelWorkbook extract(List<AresOfficeRecognizedPage> pages, List<String> paths, AresExcelOutput output, {bool headers = true, bool numberFormats = true, bool perPage = false, bool tableDetection = true});
 ```
 
@@ -338,9 +338,9 @@ bool get isSummary;
 
 ```dart
 class AresExcelPicture
-const AresExcelPicture({required this.id, required this.name, required this.row, required this.column, required this.offsetX, required this.offsetY, required this.width, required this.height, required this.bytes});
+const AresExcelPicture({required this.id, required this.name, this.title = '', this.description = '', required this.row, required this.column, required this.offsetX, required this.offsetY, required this.width, required this.height, required this.bytes});
 final int id, row, column;
-final String name;
+final String name, title, description;
 final double offsetX, offsetY, width, height;
 final Uint8List bytes;
 ```
@@ -415,7 +415,9 @@ class AresExcelSdk extends AresDomainSdk
 AresExcelSdk({required super.licenceKey, super.verifyLicence});
 Future<AresExcelPicturesSnapshot> inspectPictures(String path, {required int sheetIndex});
 Future<(AresOfficeSaveResult, int)> insertImage(String path, {required Uint8List bytes, required String fileName, required int sheetIndex, required int row, required int column, double width = 320, double? height, double offsetX = 0, double offsetY = 0, String? expectedSourceFingerprint});
+Future<AresOfficeSaveResult> replacePicture(String path, {required int sheetIndex, required int pictureId, required Uint8List bytes, String? expectedSourceFingerprint});
 Future<AresOfficeSaveResult> setPictureBounds(String path, {required int sheetIndex, required int pictureId, required int row, required int column, required double width, required double height, double offsetX = 0, double offsetY = 0, String? expectedSourceFingerprint});
+Future<AresOfficeSaveResult> setPictureMetadata(String path, {required int sheetIndex, required int pictureId, String? name, String? title, String? description, String? expectedSourceFingerprint});
 Future<AresOfficeSaveResult> deletePicture(String path, {required int sheetIndex, required int pictureId, String? expectedSourceFingerprint});
 Future<AresExcelNotesSnapshot> inspectNotes(String path, {required int sheetIndex});
 Future<AresExcelNoteOperationResult> addNote(String path, {required int sheetIndex, required String address, required String author, required String text, String? expectedSourceFingerprint});
@@ -601,7 +603,7 @@ AresOfficeDocument copyWith({String? path, AresOfficeDocumentType? type, List<Ar
 `package:ares_office_core/src/office_document.dart`
 
 ```dart
-class AresOfficeDocumentException
+class AresOfficeDocumentException implements Exception
 const AresOfficeDocumentException(this.message, {this.cause});
 final String message;
 final Object? cause;
@@ -856,7 +858,7 @@ static Future<bool> verify(AresOfficeProduct product, String licenceKey);
 `package:ares_office_core/src/sdk/ares_domain_sdk.dart`
 
 ```dart
-class AresOfficeLicenceException
+class AresOfficeLicenceException implements Exception
 const AresOfficeLicenceException(this.product);
 final AresOfficeProduct product;
 String toString();
@@ -1052,7 +1054,7 @@ enum AresOfficePlatform { android, ios, macos, windows, linux, web }
 `package:ares_office_core/src/sdk/ares_office_platforms.dart`
 
 ```dart
-class AresOfficePlatforms
+abstract final class AresOfficePlatforms
 static const Set<AresOfficePlatform> editorTargets;
 static const Set<AresOfficePlatform> documentApiTargets;
 static const Set<AresOfficePlatform> scannerTargets;
@@ -1294,7 +1296,7 @@ Future<String> extractText(AresOfficeDocument document, {required String outputP
 `package:ares_office_core/src/storage/ares_office_storage.dart`
 
 ```dart
-class AresOfficeStorage
+abstract final class AresOfficeStorage
 static Future<String> importBytes({required String name, required List<int> bytes, String? path, bool overwrite = false});
 static Future<String> open(String path);
 static Future<Uint8List> readBytes(String path);
@@ -1316,7 +1318,7 @@ const AresOfficeStorageConflict();
 `package:ares_office_core/src/storage/office_storage_error.dart`
 
 ```dart
-class AresOfficeStorageException
+class AresOfficeStorageException implements Exception
 const AresOfficeStorageException(this.message);
 final String message;
 String toString();
@@ -1708,7 +1710,7 @@ enum AresWordTableStylePreset { plain, grid, header, bandedRows }
 `package:ares_office_core/src/office_worksheet_editing.dart`
 
 ```dart
-class AresWorksheetEditing
+abstract final class AresWorksheetEditing
 static String setTabColor(String source, int argb);
 static void expandSharedFormulas(XmlDocument xml);
 static String toggleGridlines(String source);
@@ -1838,7 +1840,7 @@ List<Object?> get props;
 `package:ares_office_core/excelXEngine/src/sheet/data_model.dart`
 
 ```dart
-class CellValue
+sealed class CellValue
 const CellValue();
 ```
 
@@ -1855,7 +1857,7 @@ enum ColorType { color, material, materialAccent }
 `package:ares_office_core/excelXEngine/src/number_format/num_format.dart`
 
 ```dart
-class CustomDateTimeNumFormat extends DateTimeNumFormat
+class CustomDateTimeNumFormat extends DateTimeNumFormat implements CustomNumFormat
 const CustomDateTimeNumFormat({required super.formatCode});
 String toString();
 ```
@@ -1865,7 +1867,7 @@ String toString();
 `package:ares_office_core/excelXEngine/src/number_format/num_format.dart`
 
 ```dart
-class CustomNumFormat
+sealed class CustomNumFormat implements NumFormat
 String get formatCode;
 ```
 
@@ -1874,7 +1876,7 @@ String get formatCode;
 `package:ares_office_core/excelXEngine/src/number_format/num_format.dart`
 
 ```dart
-class CustomNumericNumFormat extends NumericNumFormat
+class CustomNumericNumFormat extends NumericNumFormat implements CustomNumFormat
 const CustomNumericNumFormat({required super.formatCode});
 bool accepts(CellValue? value);
 String toString();
@@ -1885,7 +1887,7 @@ String toString();
 `package:ares_office_core/excelXEngine/src/number_format/num_format.dart`
 
 ```dart
-class CustomTimeNumFormat extends TimeNumFormat
+class CustomTimeNumFormat extends TimeNumFormat implements CustomNumFormat
 const CustomTimeNumFormat({required super.formatCode});
 String toString();
 ```
@@ -1955,7 +1957,7 @@ dynamic ==(Object other);
 `package:ares_office_core/excelXEngine/src/number_format/num_format.dart`
 
 ```dart
-class DateTimeNumFormat extends NumFormat
+sealed class DateTimeNumFormat extends NumFormat
 const DateTimeNumFormat({required super.formatCode});
 CellValue read(String v);
 String writeDate(DateCellValue value);
@@ -2422,7 +2424,7 @@ dynamic ==(Object other);
 `package:ares_office_core/excelXEngine/src/number_format/num_format.dart`
 
 ```dart
-class NumFormat
+sealed class NumFormat
 final String formatCode;
 static const dynamic defaultNumeric;
 static const dynamic defaultFloat;
@@ -2484,7 +2486,7 @@ NumFormat? getByNumFmtId(int numFmtId);
 `package:ares_office_core/excelXEngine/src/number_format/num_format.dart`
 
 ```dart
-class NumericNumFormat extends NumFormat
+sealed class NumericNumFormat extends NumFormat
 const NumericNumFormat({required super.formatCode});
 CellValue read(String v);
 String writeDouble(DoubleCellValue value);
@@ -2577,7 +2579,7 @@ dynamic set headerFooter(HeaderFooter? headerFooter);
 `package:ares_office_core/excelXEngine/src/number_format/num_format.dart`
 
 ```dart
-class StandardDateTimeNumFormat extends DateTimeNumFormat
+class StandardDateTimeNumFormat extends DateTimeNumFormat implements StandardNumFormat
 final int numFmtId;
 String toString();
 ```
@@ -2587,7 +2589,7 @@ String toString();
 `package:ares_office_core/excelXEngine/src/number_format/num_format.dart`
 
 ```dart
-class StandardNumFormat
+sealed class StandardNumFormat implements NumFormat
 int get numFmtId;
 ```
 
@@ -2596,7 +2598,7 @@ int get numFmtId;
 `package:ares_office_core/excelXEngine/src/number_format/num_format.dart`
 
 ```dart
-class StandardNumericNumFormat extends NumericNumFormat
+class StandardNumericNumFormat extends NumericNumFormat implements StandardNumFormat
 final int numFmtId;
 bool accepts(CellValue? value);
 String toString();
@@ -2607,7 +2609,7 @@ String toString();
 `package:ares_office_core/excelXEngine/src/number_format/num_format.dart`
 
 ```dart
-class StandardTimeNumFormat extends TimeNumFormat
+class StandardTimeNumFormat extends TimeNumFormat implements StandardNumFormat
 final int numFmtId;
 String toString();
 ```
@@ -2684,7 +2686,7 @@ dynamic ==(Object other);
 `package:ares_office_core/excelXEngine/src/number_format/num_format.dart`
 
 ```dart
-class TimeNumFormat extends NumFormat
+sealed class TimeNumFormat extends NumFormat
 const TimeNumFormat({required super.formatCode});
 CellValue read(String v);
 String writeTime(TimeCellValue value);

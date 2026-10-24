@@ -122,7 +122,7 @@
     {
       "name": "AresExcelExtractor",
       "origin": "package:ares_office_core/src/scanner/ares_excel_scan.dart",
-      "declaration": "class AresExcelExtractor",
+      "declaration": "abstract final class AresExcelExtractor",
       "members": [
         "static AresExcelWorkbook extract(List<AresOfficeRecognizedPage> pages, List<String> paths, AresExcelOutput output, {bool headers = true, bool numberFormats = true, bool perPage = false, bool tableDetection = true});"
       ]
@@ -305,9 +305,9 @@
       "origin": "package:ares_office_core/src/office_excel_pictures.dart",
       "declaration": "class AresExcelPicture",
       "members": [
-        "const AresExcelPicture({required this.id, required this.name, required this.row, required this.column, required this.offsetX, required this.offsetY, required this.width, required this.height, required this.bytes});",
+        "const AresExcelPicture({required this.id, required this.name, this.title = '', this.description = '', required this.row, required this.column, required this.offsetX, required this.offsetY, required this.width, required this.height, required this.bytes});",
         "final int id, row, column;",
-        "final String name;",
+        "final String name, title, description;",
         "final double offsetX, offsetY, width, height;",
         "final Uint8List bytes;"
       ]
@@ -377,7 +377,9 @@
         "AresExcelSdk({required super.licenceKey, super.verifyLicence});",
         "Future<AresExcelPicturesSnapshot> inspectPictures(String path, {required int sheetIndex});",
         "Future<(AresOfficeSaveResult, int)> insertImage(String path, {required Uint8List bytes, required String fileName, required int sheetIndex, required int row, required int column, double width = 320, double? height, double offsetX = 0, double offsetY = 0, String? expectedSourceFingerprint});",
+        "Future<AresOfficeSaveResult> replacePicture(String path, {required int sheetIndex, required int pictureId, required Uint8List bytes, String? expectedSourceFingerprint});",
         "Future<AresOfficeSaveResult> setPictureBounds(String path, {required int sheetIndex, required int pictureId, required int row, required int column, required double width, required double height, double offsetX = 0, double offsetY = 0, String? expectedSourceFingerprint});",
+        "Future<AresOfficeSaveResult> setPictureMetadata(String path, {required int sheetIndex, required int pictureId, String? name, String? title, String? description, String? expectedSourceFingerprint});",
         "Future<AresOfficeSaveResult> deletePicture(String path, {required int sheetIndex, required int pictureId, String? expectedSourceFingerprint});",
         "Future<AresExcelNotesSnapshot> inspectNotes(String path, {required int sheetIndex});",
         "Future<AresExcelNoteOperationResult> addNote(String path, {required int sheetIndex, required String address, required String author, required String text, String? expectedSourceFingerprint});",
@@ -547,7 +549,7 @@
     {
       "name": "AresOfficeDocumentException",
       "origin": "package:ares_office_core/src/office_document.dart",
-      "declaration": "class AresOfficeDocumentException",
+      "declaration": "class AresOfficeDocumentException implements Exception",
       "members": [
         "const AresOfficeDocumentException(this.message, {this.cause});",
         "final String message;",
@@ -780,7 +782,7 @@
     {
       "name": "AresOfficeLicenceException",
       "origin": "package:ares_office_core/src/sdk/ares_domain_sdk.dart",
-      "declaration": "class AresOfficeLicenceException",
+      "declaration": "class AresOfficeLicenceException implements Exception",
       "members": [
         "const AresOfficeLicenceException(this.product);",
         "final AresOfficeProduct product;",
@@ -959,7 +961,7 @@
     {
       "name": "AresOfficePlatforms",
       "origin": "package:ares_office_core/src/sdk/ares_office_platforms.dart",
-      "declaration": "class AresOfficePlatforms",
+      "declaration": "abstract final class AresOfficePlatforms",
       "members": [
         "static const Set<AresOfficePlatform> editorTargets;",
         "static const Set<AresOfficePlatform> documentApiTargets;",
@@ -1177,7 +1179,7 @@
     {
       "name": "AresOfficeStorage",
       "origin": "package:ares_office_core/src/storage/ares_office_storage.dart",
-      "declaration": "class AresOfficeStorage",
+      "declaration": "abstract final class AresOfficeStorage",
       "members": [
         "static Future<String> importBytes({required String name, required List<int> bytes, String? path, bool overwrite = false});",
         "static Future<String> open(String path);",
@@ -1197,7 +1199,7 @@
     {
       "name": "AresOfficeStorageException",
       "origin": "package:ares_office_core/src/storage/office_storage_error.dart",
-      "declaration": "class AresOfficeStorageException",
+      "declaration": "class AresOfficeStorageException implements Exception",
       "members": [
         "const AresOfficeStorageException(this.message);",
         "final String message;",
@@ -1544,7 +1546,7 @@
     {
       "name": "AresWorksheetEditing",
       "origin": "package:ares_office_core/src/office_worksheet_editing.dart",
-      "declaration": "class AresWorksheetEditing",
+      "declaration": "abstract final class AresWorksheetEditing",
       "members": [
         "static String setTabColor(String source, int argb);",
         "static void expandSharedFormulas(XmlDocument xml);",
@@ -1667,7 +1669,7 @@
     {
       "name": "CellValue",
       "origin": "package:ares_office_core/excelXEngine/src/sheet/data_model.dart",
-      "declaration": "class CellValue",
+      "declaration": "sealed class CellValue",
       "members": [
         "const CellValue();"
       ]
@@ -1681,7 +1683,7 @@
     {
       "name": "CustomDateTimeNumFormat",
       "origin": "package:ares_office_core/excelXEngine/src/number_format/num_format.dart",
-      "declaration": "class CustomDateTimeNumFormat extends DateTimeNumFormat",
+      "declaration": "class CustomDateTimeNumFormat extends DateTimeNumFormat implements CustomNumFormat",
       "members": [
         "const CustomDateTimeNumFormat({required super.formatCode});",
         "String toString();"
@@ -1690,7 +1692,7 @@
     {
       "name": "CustomNumFormat",
       "origin": "package:ares_office_core/excelXEngine/src/number_format/num_format.dart",
-      "declaration": "class CustomNumFormat",
+      "declaration": "sealed class CustomNumFormat implements NumFormat",
       "members": [
         "String get formatCode;"
       ]
@@ -1698,7 +1700,7 @@
     {
       "name": "CustomNumericNumFormat",
       "origin": "package:ares_office_core/excelXEngine/src/number_format/num_format.dart",
-      "declaration": "class CustomNumericNumFormat extends NumericNumFormat",
+      "declaration": "class CustomNumericNumFormat extends NumericNumFormat implements CustomNumFormat",
       "members": [
         "const CustomNumericNumFormat({required super.formatCode});",
         "bool accepts(CellValue? value);",
@@ -1708,7 +1710,7 @@
     {
       "name": "CustomTimeNumFormat",
       "origin": "package:ares_office_core/excelXEngine/src/number_format/num_format.dart",
-      "declaration": "class CustomTimeNumFormat extends TimeNumFormat",
+      "declaration": "class CustomTimeNumFormat extends TimeNumFormat implements CustomNumFormat",
       "members": [
         "const CustomTimeNumFormat({required super.formatCode});",
         "String toString();"
@@ -1774,7 +1776,7 @@
     {
       "name": "DateTimeNumFormat",
       "origin": "package:ares_office_core/excelXEngine/src/number_format/num_format.dart",
-      "declaration": "class DateTimeNumFormat extends NumFormat",
+      "declaration": "sealed class DateTimeNumFormat extends NumFormat",
       "members": [
         "const DateTimeNumFormat({required super.formatCode});",
         "CellValue read(String v);",
@@ -2222,7 +2224,7 @@
     {
       "name": "NumFormat",
       "origin": "package:ares_office_core/excelXEngine/src/number_format/num_format.dart",
-      "declaration": "class NumFormat",
+      "declaration": "sealed class NumFormat",
       "members": [
         "final String formatCode;",
         "static const dynamic defaultNumeric;",
@@ -2282,7 +2284,7 @@
     {
       "name": "NumericNumFormat",
       "origin": "package:ares_office_core/excelXEngine/src/number_format/num_format.dart",
-      "declaration": "class NumericNumFormat extends NumFormat",
+      "declaration": "sealed class NumericNumFormat extends NumFormat",
       "members": [
         "const NumericNumFormat({required super.formatCode});",
         "CellValue read(String v);",
@@ -2369,7 +2371,7 @@
     {
       "name": "StandardDateTimeNumFormat",
       "origin": "package:ares_office_core/excelXEngine/src/number_format/num_format.dart",
-      "declaration": "class StandardDateTimeNumFormat extends DateTimeNumFormat",
+      "declaration": "class StandardDateTimeNumFormat extends DateTimeNumFormat implements StandardNumFormat",
       "members": [
         "final int numFmtId;",
         "String toString();"
@@ -2378,7 +2380,7 @@
     {
       "name": "StandardNumFormat",
       "origin": "package:ares_office_core/excelXEngine/src/number_format/num_format.dart",
-      "declaration": "class StandardNumFormat",
+      "declaration": "sealed class StandardNumFormat implements NumFormat",
       "members": [
         "int get numFmtId;"
       ]
@@ -2386,7 +2388,7 @@
     {
       "name": "StandardNumericNumFormat",
       "origin": "package:ares_office_core/excelXEngine/src/number_format/num_format.dart",
-      "declaration": "class StandardNumericNumFormat extends NumericNumFormat",
+      "declaration": "class StandardNumericNumFormat extends NumericNumFormat implements StandardNumFormat",
       "members": [
         "final int numFmtId;",
         "bool accepts(CellValue? value);",
@@ -2396,7 +2398,7 @@
     {
       "name": "StandardTimeNumFormat",
       "origin": "package:ares_office_core/excelXEngine/src/number_format/num_format.dart",
-      "declaration": "class StandardTimeNumFormat extends TimeNumFormat",
+      "declaration": "class StandardTimeNumFormat extends TimeNumFormat implements StandardNumFormat",
       "members": [
         "final int numFmtId;",
         "String toString();"
@@ -2466,7 +2468,7 @@
     {
       "name": "TimeNumFormat",
       "origin": "package:ares_office_core/excelXEngine/src/number_format/num_format.dart",
-      "declaration": "class TimeNumFormat extends NumFormat",
+      "declaration": "sealed class TimeNumFormat extends NumFormat",
       "members": [
         "const TimeNumFormat({required super.formatCode});",
         "CellValue read(String v);",
@@ -2536,6 +2538,7 @@
         "void insertWordTable(int afterIndex, int rows, int columns);",
         "void editWordTableAxis(int sectionIndex, int index, {required bool column, required bool insert});",
         "void resizeWordTable(int sectionIndex, int rows, int columns);",
+        "void sortWordTable(int sectionIndex, {required List<AresWordTableSortKey> keys, int headerRows = 1});",
         "void setWordTableCell(int sectionIndex, int row, int column, String value, {int? fillColorArgb, String? verticalAlignment, String? textDirection, String? tableLayout, String? borderPreset, double? cellMarginPoints, double? columnWidthPoints, double? rowHeightPoints, String? rowHeightRule, bool? repeatHeaderRow, bool? preventRowSplit});",
         "void applyWordTableStylePreset(int sectionIndex, AresWordTableStylePreset preset);",
         "void mergeWordTableCells(int sectionIndex, String range, {bool split = false});",
@@ -2568,6 +2571,8 @@
         "void applyTransitionToAll(int sectionIndex);",
         "int addPresentationFreeform(int sectionIndex, AresFreeformPath path, {String text = '', double x = 72, double y = 72, double width = 240, double height = 180});",
         "void setPresentationFreeform(int sectionIndex, int objectId, AresFreeformPath path);",
+        "void movePresentationFreeformHandle(int sectionIndex, int objectId, int vertexIndex, {required bool incoming, required Offset position, AresFreeformHandleConstraint constraint = AresFreeformHandleConstraint.independent});",
+        "void splitPresentationFreeformSegment(int sectionIndex, int objectId, int segmentIndex, {double t = .5});",
         "void editPresentationXml(int sectionIndex, String Function(String source) edit, {String? slideLayoutPath});",
         "void updatePresentationOutline(Map<int, Map<int, String>> textBySlide, {Map<int, Map<int, List<int>>> paragraphLevelsBySlide = const <int, Map<int, List<int>>>{}});",
         "void changePresentationTextCase(int sectionIndex, String mode);",

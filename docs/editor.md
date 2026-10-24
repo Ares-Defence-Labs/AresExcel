@@ -9,6 +9,11 @@ round trips. This does not certify protected customer packages or full Microsoft
 feature parity. See [storage](storage.md) and [platforms](platforms.md).
 Windows runtime acceptance is tracked in [Windows validation](windows-validation.md).
 
+Landscape layouts expose Undo and Redo in the document bar. They restore saved
+package history as well as pending edits, respect read-only/host policy and are
+disabled while a file operation is busy. Compact bars place fit/zoom actions in
+a Zoom menu to keep history controls usable without overflowing.
+
 `AresExcelEditor(sdk: sdk, documentPath: path)` embeds the domain editor and its
 editing controls. It checks the SDK licence and the document domain before
 loading. Use an absolute native path, or a virtual path returned by browser storage.
@@ -37,7 +42,11 @@ for constructor options and [compatibility limits](compatibility.md).
 ## Excel native pictures
 
 For OOXML workbooks, Image inserts a native one-cell PNG/JPEG picture. Select a
-supported picture to change its row, column, offsets and size, or delete it.
+supported picture to change its row, column, offsets and size, replace its image,
+or delete it. Alternative text edits the native name, title and description;
+the description/title supplies the accessible label. Its saved changes participate
+in undo/redo without changing media or geometry. Replace image retains native identity, saved geometry and metadata,
+and isolates shared image bytes. Use Apply to save position/size field edits.
 The dialog uses one-based row/column labels and pixel dimensions; saved changes
 participate in undo/redo. Read-only/protected files cannot change pictures.
 The viewer renders this subset within its 500-row/100-column preview bounds;

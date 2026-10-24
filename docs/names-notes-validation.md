@@ -16,10 +16,11 @@ and reference formulas before structural changes. [Workbook recipe](../examples/
 
 ## Native worksheet pictures
 
-Use `sdk.inspectPictures`, `insertImage`, `setPictureBounds` and `deletePicture`
+Use `sdk.inspectPictures`, `insertImage`, `replacePicture`, `setPictureMetadata`,
+`setPictureBounds` and `deletePicture`
 for supported one-cell PNG/JPEG pictures, separately from Ares private attachments.
 The editor Image action inserts them; selecting a picture opens move/size/delete
-controls with saved undo/redo. [Picture API, geometry and rendering limits](low-level-api.md#excel-worksheet-pictures)
+controls and payload replacement with saved undo/redo. [Picture API, geometry and rendering limits](low-level-api.md#excel-worksheet-pictures)
 
 ## Defined names
 

@@ -49,6 +49,47 @@ Future<AresOfficeDocument> createTypedWorkbook(AresExcelSdk sdk, {String? native
 }
 
 
+// Explicitly set optional match modes, then save through the licensed SDK.
+Future<AresFormulaResult> extractText(AresExcelSdk sdk, String path) async {
+  final session = await sdk.edit(await sdk.load(path));
+  try {
+    session.setCell(sectionIndex: 0, row: 0, column: 0,
+      value: '=TEXTAFTER(TEXTBEFORE("North-South-East","-",-1),"-")');
+    final saved = await sdk.save(session);
+    return AresOfficeFormulaEngine(saved.document).evaluateCell(0, 0, 0);
+  } finally { session.dispose(); }
+}
+
+Future<AresFormulaResult> insertTextFormula(AresExcelSdk sdk, String path) async {
+  final session = await sdk.edit(await sdk.load(path));
+  try {
+    session.setCell(sectionIndex: 0, row: 29, column: 0,
+      value: '=TEXTJOIN(" | ",TRUE,SUBSTITUTE("Old name","Old","New"),REPT("!",3))');
+    final saved = await sdk.save(session);
+    return AresOfficeFormulaEngine(saved.document).evaluateCell(0, 29, 0);
+  } finally { session.dispose(); }
+}
+
+Future<AresFormulaResult> insertBinaryLookupFormula(AresExcelSdk sdk, String path) async {
+  final session = await sdk.edit(await sdk.load(path));
+  try {
+    session.setCell(sectionIndex: 0, row: 29, column: 0,
+      value: '=XLOOKUP(25,{10;20;30},{100;200;300},,-1,2)');
+    final saved = await sdk.save(session);
+    return AresOfficeFormulaEngine(saved.document).evaluateCell(0, 29, 0);
+  } finally { session.dispose(); }
+}
+
+Future<AresFormulaResult> insertMatchIndexFormula(AresExcelSdk sdk, String path) async {
+  final session = await sdk.edit(await sdk.load(path));
+  try {
+    session.setCell(sectionIndex: 0, row: 29, column: 0,
+      value: '=INDEX({10,20;30,40},XMATCH("B",{"A";"B"}),XMATCH("Q2",{"Q1","Q2"}))');
+    final saved = await sdk.save(session);
+    return AresOfficeFormulaEngine(saved.document).evaluateCell(0, 29, 0);
+  } finally { session.dispose(); }
+}
+
 Future<AresFormulaResult> insertCashFlowFormula(AresExcelSdk sdk, String path) async {
   final session = await sdk.edit(await sdk.load(path));
   try {

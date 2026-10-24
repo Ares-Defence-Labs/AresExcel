@@ -29,6 +29,14 @@ Future<(AresOfficeSaveResult, int)> insertImage(
     String? expectedSourceFingerprint,
   });
 
+Future<AresOfficeSaveResult> replacePicture(
+    String path, {
+    required int sheetIndex,
+    required int pictureId,
+    required Uint8List bytes,
+    String? expectedSourceFingerprint,
+  });
+
 Future<AresOfficeSaveResult> setPictureBounds(
     String path, {
     required int sheetIndex,
@@ -39,6 +47,16 @@ Future<AresOfficeSaveResult> setPictureBounds(
     required double height,
     double offsetX = 0,
     double offsetY = 0,
+    String? expectedSourceFingerprint,
+  });
+
+Future<AresOfficeSaveResult> setPictureMetadata(
+    String path, {
+    required int sheetIndex,
+    required int pictureId,
+    String? name,
+    String? title,
+    String? description,
     String? expectedSourceFingerprint,
   });
 
