@@ -1,6 +1,6 @@
 # Compatibility and feature limits
 
-Excel provides cell editing, a formula engine, defined names, supported worksheet operations and legacy notes. Native hyperlink work is in development and has not yet completed the editor regression gate. Formula conformance, reference rewriting, advanced charts, pivots/slicers, modern threaded comments, protection modes and the remaining Microsoft feature set are unfinished.
+Excel provides cell editing, a formula engine, defined names, supported worksheet operations and legacy notes. Native hyperlink CRUD, supported local range/name navigation and explicit host-controlled external opening have synthetic SDK/editor checks; complete link semantics and candidate/runtime acceptance remain open. Formula conformance, reference rewriting, advanced charts, pivots/slicers, modern threaded comments, protection modes and the remaining Microsoft feature set are unfinished.
 
 New scanner output uses `.xlsx`. Native templates and supported macro-enabled
 containers may preserve parts, but macro/VBA execution is not provided by that
